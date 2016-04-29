@@ -157,34 +157,30 @@
                     }(schema, obj[0].value);
                 }
             },
-            // dataZoom: {
-            //     show: true,
-            //     orient: 'vertical',
-            //     parallelAxisIndex: [0]
-            // },
-            parallelAxis: [
-                { dim: 0, name: schema[0].text, inverse: false,  nameLocation: 'start' },
-                { dim: 1, name: schema[1].text },
-                { dim: 2, name: schema[2].text },
-                //{ dim: 3, name: schema[3].text },
-                //{ dim: 4, name: schema[4].text },
-                //{ dim: 5, name: schema[5].text },
-                //{ dim: 6, name: schema[6].text },
-                //{
-                //    dim: 7, name: schema[7].text,
-                //    type: 'category', data: ['优', '良', '轻度污染', '中度污染', '重度污染', '严重污染']
-                //}
-            ],
-            visualMap: {
-                show: true,
-                min: 0,
-                max: 15000,
-                dimension: 2,
-                inRange: {
-                    color: ['#d94e5d', '#eac736', '#50a3ba'].reverse(),
-                    // colorAlpha: [0, 1]
+             //dataZoom: {
+             //    show: true,
+             //    orient: 'vertical',
+             //    parallelAxisIndex: [0]
+             //}, 
+
+            parallelAxis: new function () {
+                var _ret = [];
+                for (i = 0, n = schema.length; i < n; i++) {
+                    _ret.push({ dim: i, name: schema[i].text, inverse: false, nameLocation: 'end' });
                 }
-            },
+                return _ret;
+            }(),
+
+            //visualMap: {
+            //    show: true,
+            //    min: 0,
+            //    max: 15000,
+            //    dimension: 2,
+            //    inRange: {
+            //        color: ['#d94e5d', '#eac736', '#50a3ba'].reverse(),
+            //        // colorAlpha: [0, 1]
+            //    }
+            //},
             parallel: {
                 //left: '5%',
                 //right: '18%',
