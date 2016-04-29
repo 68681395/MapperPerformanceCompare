@@ -14,38 +14,50 @@
         // dom ready to initialize echart instance
         var myChart = echarts.init(document.getElementById('main'));
 
-         
+        var lineStyle = {
+            normal: {
+                width: 1,
+                opacity: 0.5
+            }
+        };
         // set config and data
-        var seriesdata = new function () {
+        var seriesdata = new function (data) {
             var d = [];
-            for (var i = 0, n = dataAll.length; i < n; i++) {
+            for (var k = 0, n = data.length; k < n; k++) {
+                var item = data[k];
                 d.push({
-                    name: dataAll[i].name,
-                    type: 'scatter',
-                    data: new function (d) {
-                        var iterations = d.Iterations;
-                        var timeElapseds = d.TimeElapseds;
-                        var cpuCycles = d.CPUCycles;
-                        var _abc = [];
-                        for (var i = 0, n = iterations.length; i < n; i++)
-                            _abc.push([iterations[i], timeElapseds[i]]);
-                        return _abc;
-                    }(dataAll[i]),
-                    markPoint: {
-                        data: [
-                            { type: 'max', name: 'Max' },
-                            //{ type: 'min', name: 'Min' }
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            { type: 'average', name: 'Average' }
-                        ]
-                    }
+                    name: item.name,
+                    type: 'parallel',
+                    lineStyle: lineStyle,
+                    data: new function (itemdata) {
+                        var i = 0, ret = [];
+                        var dowhile = true;
+                        do {
+                            var paralleldata = [];
+                            for (var p in itemdata) {
+                                var values = itemdata[p];
+                                if (values instanceof Array) {
+                                    if (values.length <= i) {
+                                        dowhile = false;
+                                        break;
+                                    }
+                                    var a = values[i];
+                                    paralleldata.push(a);
+                                }
+                            }
+                            if (dowhile) {
+                                ret.push(paralleldata);
+                                i++;
+                            }
+
+                        } while (dowhile)
+                        return ret;
+                    }(item)
                 });
             }
+           
             return d;
-        }(); 
+        }(dataAll);
 
         var dataSH = [
             [1, 91, 45, 125, 0.82, 34, 23, "良"],
@@ -93,25 +105,24 @@
         ];
 
         var schema = new function (d) {
-                        if (!d) return [{ name: 'date', index: 0, text: '日期' }];                      
-                        var _abc = [], i = 0;
-                        for (var p in d) {
-                            _abc.push({ "name": p, "index": 0, "text": p });
-                            i++;
-                        }                            
-                        return _abc;                   
-        }(dataAll.length>0?dataAll[0]:null);
-
-        var lineStyle = {
-            normal: {
-                width: 1,
-                opacity: 0.5
+            if (!d) return [{ name: 'date', index: 0, text: '日期' }];
+            var _abc = [], i = 0;
+            for (var p in d) {
+                if (d[p] instanceof Array) {
+                    console.log("schema :" + p)
+                    _abc.push({ name: p, index: i, text: p });
+                    i++;
+                }
             }
-        };
+            return _abc;
+        }(dataAll.length > 0 ? dataAll[0] : null);
+
+
 
         var legenddata = new function (d) {
             var _d = [];
             for (var i = 0, n = d.length; i < n; i++) {
+
                 _d.push(d[i].name);
             }
             return _d;
@@ -134,17 +145,16 @@
                 borderColor: '#777',
                 borderWidth: 1,
                 formatter: function (obj) {
-                    var value = obj[0].value;
-                    return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
+                    return new function (schema, value) {
+                        var s = '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
                         + obj[0].seriesName + ' ' + value[0] + '日期：'
                         + value[7]
-                        + '</div>'
-                        + schema[1].text + '：' + value[1] + '<br>'
-                        + schema[2].text + '：' + value[2] + '<br>'
-                        + schema[3].text + '：' + value[3] + '<br>'
-                        + schema[4].text + '：' + value[4] + '<br>'
-                        + schema[5].text + '：' + value[5] + '<br>'
-                        + schema[6].text + '：' + value[6] + '<br>';
+                        + '</div>';
+                        for (var i = 0, n = schema.length; i < n;) {
+                            s += schema[i].text + '：' + value[i] + '<br>'
+                        }
+                        return s;
+                    }(schema, obj[0].value);
                 }
             },
             // dataZoom: {
@@ -153,22 +163,22 @@
             //     parallelAxisIndex: [0]
             // },
             parallelAxis: [
-                { dim: 0, name: schema[0].text, inverse: true, max: 31, nameLocation: 'start' },
+                { dim: 0, name: schema[0].text, inverse: false,  nameLocation: 'start' },
                 { dim: 1, name: schema[1].text },
                 { dim: 2, name: schema[2].text },
-                { dim: 3, name: schema[3].text },
-                { dim: 4, name: schema[4].text },
-                { dim: 5, name: schema[5].text },
-                { dim: 6, name: schema[6].text },
-                {
-                    dim: 7, name: schema[7].text,
-                    type: 'category', data: ['优', '良', '轻度污染', '中度污染', '重度污染', '严重污染']
-                }
+                //{ dim: 3, name: schema[3].text },
+                //{ dim: 4, name: schema[4].text },
+                //{ dim: 5, name: schema[5].text },
+                //{ dim: 6, name: schema[6].text },
+                //{
+                //    dim: 7, name: schema[7].text,
+                //    type: 'category', data: ['优', '良', '轻度污染', '中度污染', '重度污染', '严重污染']
+                //}
             ],
             visualMap: {
                 show: true,
                 min: 0,
-                max: 150,
+                max: 15000,
                 dimension: 2,
                 inRange: {
                     color: ['#d94e5d', '#eac736', '#50a3ba'].reverse(),
@@ -176,12 +186,12 @@
                 }
             },
             parallel: {
-                left: '5%',
-                right: '18%',
-                bottom: 100,
+                //left: '5%',
+                //right: '18%',
+                //bottom: 100,
                 parallelAxisDefault: {
                     type: 'value',
-                    name: 'AQI指数',
+                    name: 'Iterations',
                     nameLocation: 'end',
                     nameGap: 20,
                     nameTextStyle: {
@@ -208,33 +218,14 @@
                     }
                 }
             },
-            series: [
-                {
-                    name: '北京',
-                    type: 'parallel',
-                    lineStyle: lineStyle,
-                    data: dataBJ
-                },
-                {
-                    name: '上海',
-                    type: 'parallel',
-                    lineStyle: lineStyle,
-                    data: dataSH
-                },
-                {
-                    name: '广州',
-                    type: 'parallel',
-                    lineStyle: lineStyle,
-                    data: dataGZ
-                }
-            ]
+            series: seriesdata
         };
 
 
 
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
-         
+
     </script>
 </body>
 </html>
