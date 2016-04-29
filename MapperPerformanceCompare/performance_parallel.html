@@ -81,7 +81,7 @@
             [31, 187, 143, 201, 1.39, 89, 53, "中度污染"]
         ];
 
-        var schema = [
+        var schema1 = [
             { name: 'date', index: 0, text: '日期' },
             { name: 'AQIindex', index: 1, text: 'AQI' },
             { name: 'PM25', index: 2, text: 'PM2.5' },
@@ -92,6 +92,16 @@
             { name: '等级', index: 7, text: '等级' }
         ];
 
+        var schema = new function (d) {
+                        if (!d) return [{ name: 'date', index: 0, text: '日期' }];                      
+                        var _abc = [], i = 0;
+                        for (var p in d) {
+                            _abc.push({ "name": p, "index": 0, "text": p });
+                            i++;
+                        }                            
+                        return _abc;                   
+        }(dataAll.length>0?dataAll[0]:null);
+
         var lineStyle = {
             normal: {
                 width: 1,
@@ -99,11 +109,19 @@
             }
         };
 
+        var legenddata = new function (d) {
+            var _d = [];
+            for (var i = 0, n = d.length; i < n; i++) {
+                _d.push(d[i].name);
+            }
+            return _d;
+        }(dataAll);
+
         option = {
             backgroundColor: '#333',
             legend: {
                 bottom: 30,
-                data: ['北京', '上海', '广州'],
+                data: legenddata,
                 itemGap: 20,
                 textStyle: {
                     color: '#fff',
