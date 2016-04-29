@@ -68,6 +68,7 @@
     <Compile Include="CodeTimer.cs" />
     <Compile Include="EmitMapperWrapper.cs" />
     <Compile Include="FlatteningClassMapper.cs" />
+    <Compile Include="IObjectToObjectMapper.cs" />
     <Compile Include="ManualMapper.cs" />
     <Compile Include="NLiteMaperWrapper.cs" />
     <Compile Include="Program.cs" />
@@ -86,6 +87,12 @@
     </Content>
     <Content Include="jquery-2.2.3.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="performance_parallel.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="performance_bar.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="performance.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

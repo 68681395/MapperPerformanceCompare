@@ -9,50 +9,6 @@ using System.Reflection;
 
 namespace NLiteEmitCompare
 {
-    [Contract]
-    public interface IObjectToObjectMapper
-    {
-        //初始化映射器
-        void Initialize();
-        //执行映射
-        void Map();
-    }
-
-    //测试映射器元数据
-    public interface IMapperMetadata
-    {
-        //目录
-        string Category { get; }
-        //名称
-        string Name { get; }
-        string Descrption { get; }
-    }
-
-    //映射器元数据注解
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    [MetadataAttributeAttribute]
-    public class MapperAttribute : ComponentAttribute
-    {
-        public string Category { get; set; }
-        public string Name { get; set; }
-        public string Descrption { get; set; }
-    }
-
-
-    public class Record
-    {
-        public IMapperMetadata Mapper { get; set; }
-
-        public List<IterationRecord> Iterations { get; set; }
-    }
-
-    public class IterationRecord
-    {
-        public int Iteration { get; set; }
-
-        public long TimeElapsed { get; set; }
-        public long CPUCycles { get; set; }
-    }
 
     class Program
     {
@@ -83,13 +39,6 @@ namespace NLiteEmitCompare
         static void Main(string[] args)
         {
 
-
-
-
-            //CsvHelper.CsvWriter wr = new CsvHelper.CsvWriter(twr);
-
-            //wr.WriteRecord()
-
             ServiceRegistry.RegisteryFromAssemblyOf<Program>();
 
             var host = new Program();
@@ -102,17 +51,16 @@ namespace NLiteEmitCompare
             var data = records.Select(x => new
             {
                 name = x.Mapper.Name,
-                data =
-                    x.Iterations.Select(v =>
-                    new long[] { v.Iteration, v.TimeElapsed }
-                    ).ToArray()
+                Iterations = x.Iterations.Select(v => v.Iteration).ToArray(),
+                TimeElapseds = x.Iterations.Select(v => v.TimeElapsed).ToArray(),
+                CPUCycles = x.Iterations.Select(v => v.CPUCycles).ToArray(),
             }).ToArray();
 
 
             var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             var s = Newtonsoft.Json.JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.None);
-            var file =Path.Combine(dir  , "dataJs.js");
+            var file = Path.Combine(dir, "dataJs.js");
             using (var writer = new StreamWriter(file))
             {
                 writer.Write("dataAll=");

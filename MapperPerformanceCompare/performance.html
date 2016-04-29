@@ -8,21 +8,28 @@
     <script src="echarts.min.js"></script>
 </head>
 <body>
-    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <!-- prepare Dom which be set width and height for echarts -->
     <div id="main" style="width: 1000px;height:600px;"></div>
     <script type="text/javascript">
-        // 基于准备好的dom，初始化echarts实例
+        // dom ready to initialize echart instance
         var myChart = echarts.init(document.getElementById('main'));
 
          
-        // 指定图表的配置项和数据
-        var s = new function () {
+        // set config and data
+        var seriesdata = new function () {
             var d = [];
             for (var i = 0, n = dataAll.length; i < n; i++) {
                 d.push({
                     name: dataAll[i].name,
                     type: 'scatter',
-                    data: dataAll[i].data,
+                    data: new function(d) {
+                        var iterations = d.Iterations;
+                        var timeElapseds = d.TimeElapseds;
+                        var _abc = [];
+                        for (var i = 0, n = iterations.length; i < n; i++)
+                            _abc.push([iterations[i], timeElapseds[i]]);
+                        return _abc;
+                    }(dataAll[i]),
                     markPoint: {
                         data: [
                             { type: 'max', name: 'Max' },
@@ -113,7 +120,7 @@
                     }
                 }
             ],
-            series: s
+            series: seriesdata
         };
 
 
