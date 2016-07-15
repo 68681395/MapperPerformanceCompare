@@ -1,6 +1,6 @@
 namespace NLiteEmitCompare.FlatteningClass
 {
-    [Mapper(Category = "Flattening.Class", Name = "BLToolkitMapper")]
+    [TestItem(Category = "Flattening.Class", Name = "BLToolkitMapper")]
     public class BLToolkitMapper : MapperBase
     {
         //public override string Name
@@ -14,7 +14,7 @@ namespace NLiteEmitCompare.FlatteningClass
 
         }
 
-        public override void Map()
+        public override void Run()
         {
             _target = BLToolkit.Mapping.Map.ObjectToObject<ModelDto>(_source);
         }

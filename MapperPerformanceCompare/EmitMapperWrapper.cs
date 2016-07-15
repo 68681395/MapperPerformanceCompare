@@ -2,7 +2,7 @@ using EmitMapper;
 
 namespace NLiteEmitCompare.FlatteningClass
 {
-    [Mapper(Category = "Flattening.Class", Name = "EmitMapper")]
+    [TestItem(Category = "Flattening.Class", Name = "EmitMapper")]
     public class EmitMapperWrapper : MapperBase
     {
         ObjectsMapper<ModelObject, ModelDto> mapper;
@@ -11,7 +11,7 @@ namespace NLiteEmitCompare.FlatteningClass
             mapper = ObjectMapperManager.DefaultInstance.GetMapper<ModelObject, ModelDto>();
         }
 
-        public override void Map()
+        public override void Run()
         {
             _target = mapper.Map(_source);
         }

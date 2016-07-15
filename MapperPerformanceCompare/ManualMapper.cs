@@ -1,9 +1,9 @@
 namespace NLiteEmitCompare.FlatteningClass
 {
-    [Mapper(Category = "Flattening.Class", Name = "Manual")]
+    [TestItem(Category = "Flattening.Class", Name = "Manual")]
     public class ManualMapper : MapperBase
     {
-        public override void Map()
+        public override void Run()
         {
             var destination = new ModelDto
             {

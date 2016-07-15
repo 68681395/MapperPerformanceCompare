@@ -13,15 +13,15 @@ namespace NLiteEmitCompare
     class Program
     {
         [InjectMany]
-        private Lazy<IObjectToObjectMapper, IMapperMetadata>[] Mappers;
+        private Lazy<ITestRunner, ITestMetadata>[] TestItems;
 
         //初始化映射器，并做一次映射操作
         void Init()
         {
-            foreach (var item in Mappers)
+            foreach (var item in TestItems)
             {
                 item.Value.Initialize();
-                item.Value.Map();
+                item.Value.Run();
             }
 
         }
@@ -31,8 +31,8 @@ namespace NLiteEmitCompare
         {
             CodeTimer.Initialize();
 
-            foreach (var item in Mappers)
-                CodeTimer.Time(item.Metadata, () => item.Value.Map(),
+            foreach (var item in TestItems)
+                CodeTimer.Time(item.Metadata, () => item.Value.Run(),
                     records, Enumerable.Range(1, 10).Select(x => 10000 * x).ToArray());
         }
 
@@ -40,7 +40,6 @@ namespace NLiteEmitCompare
         {
 
             ServiceRegistry.RegisteryFromAssemblyOf<Program>();
-
             var host = new Program();
             ServiceRegistry.Compose(host);
 

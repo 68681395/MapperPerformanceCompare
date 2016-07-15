@@ -9,7 +9,7 @@ namespace NLiteEmitCompare
     
     namespace FlatteningClass
     {
-        public abstract class MapperBase : IObjectToObjectMapper
+        public abstract class MapperBase : ITestRunner
         {
             protected ModelObject _source;
             protected ModelDto _target;
@@ -41,7 +41,7 @@ namespace NLiteEmitCompare
                 };
             }
 
-            public abstract void Map();
+            public abstract void Run();
         }
 
 

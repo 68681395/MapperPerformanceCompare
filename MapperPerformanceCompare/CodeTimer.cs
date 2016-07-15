@@ -15,12 +15,12 @@ namespace NLiteEmitCompare
             Time(null, () => { }, null, 1);
         }
 
-        public static void Time(IMapperMetadata mapper, Action action)
+        public static void Time(ITestMetadata mapper, Action action)
         {
             Time(null, action, null, 1);
         }
 
-        public static void Time(IMapperMetadata mapper, Action action, List<Record> records, params int[] iterations)
+        public static void Time(ITestMetadata mapper, Action action, List<Record> records, params int[] iterations)
         {
             if (mapper == null) return;
 

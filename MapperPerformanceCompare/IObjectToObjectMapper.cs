@@ -5,16 +5,16 @@ using System.Collections.Generic;
 namespace NLiteEmitCompare
 {
     [Contract]
-    public interface IObjectToObjectMapper
+    public interface ITestRunner
     {
         //初始化映射器
         void Initialize();
         //执行映射
-        void Map();
+        void Run();
     }
 
     //测试映射器元数据
-    public interface IMapperMetadata
+    public interface ITestMetadata
     {
         //目录
         string Category { get; }
@@ -26,7 +26,7 @@ namespace NLiteEmitCompare
     //映射器元数据注解
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     [MetadataAttributeAttribute]
-    public class MapperAttribute : ComponentAttribute
+    public class TestItemAttribute : ComponentAttribute
     {
         public string Category { get; set; }
         public string Name { get; set; }
@@ -36,7 +36,7 @@ namespace NLiteEmitCompare
 
     public class Record
     {
-        public IMapperMetadata Mapper { get; set; }
+        public ITestMetadata Mapper { get; set; }
 
         public List<IterationRecord> Iterations { get; set; }
     }
