@@ -55,6 +55,10 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLite, Version=0.9.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLite.0.9.6\lib\net40\NLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -75,8 +79,6 @@
     <Compile Include="Osgi\Ex.cs" />
     <Compile Include="Osgi\ExtensionPoint`1.cs" />
     <Compile Include="Osgi\Internal\ExtensionPoint.cs" />
-    <Compile Include="Osgi\ILog.cs" />
-    <Compile Include="Osgi\LogManager.cs" />
     <Compile Include="Osgi\Internal\MultiVersionAssembly.cs" />
     <Compile Include="Osgi\Internal\TypeInitExtensionPoint.cs" />
     <Compile Include="Osgi\LazyLoading.cs" />

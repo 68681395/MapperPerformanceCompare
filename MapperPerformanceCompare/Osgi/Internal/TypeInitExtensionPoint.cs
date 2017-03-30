@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Common.Logging;
+
+using static Tsharp.SimpleLogger;
 
 namespace TSharp.Core.Osgi.Internal
 {

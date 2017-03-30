@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using Common.Logging;
+using static Tsharp.SimpleLogger;
 using System.Linq.Expressions;
 using System.Linq;
 

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Common.Logging;
+using static Tsharp.SimpleLogger;
 using TSharp.Core.Osgi.Internal;
 using System.Collections.Concurrent;
 
