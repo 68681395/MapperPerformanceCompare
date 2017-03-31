@@ -70,9 +70,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MapperPerformanceCompare\PerformanceTool.csproj">
+    <ProjectReference Include="..\PerformanceTestTool\PerformanceTestTool.csproj">
       <Project>{4f896fc9-7ddd-4441-8696-54cc1d32c76d}</Project>
-      <Name>PerformanceTool</Name>
+      <Name>PerformanceTestTool</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
