@@ -4,23 +4,21 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-using static Tsharp.SimpleLogger;
-
-namespace TSharp.Core.Osgi.Internal
+namespace PerformanceTool.Osgi.Internal
 {
     /// <summary>
-    /// 类类型初始化扩展点
-    /// <para>2010/12/24</para>
-    /// 	<para>THINKPADT61</para>
-    /// 	<para>tangjingbo</para>
+    ///     类类型初始化扩展点
+    ///     <para>2010/12/24</para>
+    ///     <para>THINKPADT61</para>
+    ///     <para>tangjingbo</para>
     /// </summary>
     internal class TypeInitExtensionPoint : ExtensionPoint<RegTypeInitAttribute>
     {
-        private static ILog log = LogManager.GetCurrentClassLogger();
+        private static readonly SimpleLogger.ILog log = SimpleLogger.LogManager.GetCurrentClassLogger();
         private readonly List<Type> _types = new List<Type>(50);
 
         /// <summary>
-        /// Registers the specified assembly.
+        ///     Registers the specified assembly.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <param name="attribute">The attribute.</param>
@@ -30,7 +28,7 @@ namespace TSharp.Core.Osgi.Internal
         }
 
         /// <summary>
-        /// Uns the register.
+        ///     Uns the register.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <param name="attribute">The attribute.</param>
@@ -39,12 +37,11 @@ namespace TSharp.Core.Osgi.Internal
         }
 
         /// <summary>
-        /// 加载时执行
+        ///     加载时执行
         /// </summary>
         protected internal override void OnLoad()
         {
-            foreach (Type initType in _types)
-            {
+            foreach (var initType in _types)
                 try
                 {
                     RuntimeHelpers.RunClassConstructor(initType.TypeHandle);
@@ -58,7 +55,6 @@ namespace TSharp.Core.Osgi.Internal
                     Debug.WriteLine(ex.ToString());
                     log.Error(ex);
                 }
-            }
             _types.Clear();
             base.OnLoad();
         }

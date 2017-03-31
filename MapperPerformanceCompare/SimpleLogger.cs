@@ -33,7 +33,7 @@ using System.Threading;
 
 #endregion
 
-namespace Tsharp
+namespace PerformanceTool
 {
     public static class SimpleLogger
     {
@@ -186,7 +186,6 @@ namespace Tsharp
             /// </summary>
             Midnight
         }
-
 
 
         public interface ILog
@@ -1946,8 +1945,8 @@ namespace Tsharp
             /// <returns></returns>
             protected virtual bool IsLevelEnabled(LogLevel level)
             {
-                var iLevel = (int)level;
-                var iCurrentLogLevel = (int)CurrentLogLevel;
+                var iLevel = (int) level;
+                var iCurrentLogLevel = (int) CurrentLogLevel;
 
                 // return iLevel.CompareTo(iCurrentLogLevel); better ???
                 return iLevel >= iCurrentLogLevel;
@@ -2127,29 +2126,26 @@ namespace Tsharp
         public static class LogManager
         {
             private static readonly object _loadLock = new object();
-            private static RollingFlatFileTraceListener listener = new RollingFlatFileTraceListener("App_Data/log/trace.log",
-                  null,
-                  null, 1024, "yyyyMMddHHmm", "'archived'yyyyMMdd",
-                  RollFileExistsBehavior.Increment, RollInterval.Day);
 
-            private static LogSource source;
+            private static readonly RollingFlatFileTraceListener listener =
+                new RollingFlatFileTraceListener("App_Data/log/trace.log", null, null, 1024,
+                    "yyyyMMddHHmm", "'archived'yyyyMMdd", RollFileExistsBehavior.Increment,
+                    RollInterval.Day);
+
+            private static readonly LogSource source;
             private static readonly ConcurrentDictionary<string, ILog> _cachedLoggers;
 
-            private static ConfigReader reader;
+            private static readonly ConfigReader reader;
 
-            private static string _dateTimeFormat;
-            private static bool _showDateTime;
-            private static bool _showLevel;
-            private static bool _showLogName;
+            private static readonly string _dateTimeFormat;
+            private static readonly bool _showDateTime;
+            private static readonly bool _showLevel;
+            private static readonly bool _showLogName;
 
-            /// <summary>
-            ///     The default <see cref="LogLevel" /> to use when creating new <see cref="ILog" /> instances.
-            /// </summary>
-            public static LogLevel Level { get; set; }
             static LogManager()
             {
                 _cachedLoggers =
-                     new ConcurrentDictionary<string, ILog>(StringComparer.OrdinalIgnoreCase);
+                    new ConcurrentDictionary<string, ILog>(StringComparer.OrdinalIgnoreCase);
                 reader = new ConfigReader("App_Data/simplelogger.conf");
                 reader.ConfigChange += Reader_ConfigChange;
                 _dateTimeFormat = reader.GetValue("dateTimeFormat", "yyyy-MM-ddTHH:mm:ssK");
@@ -2157,12 +2153,16 @@ namespace Tsharp
                 _showLevel = reader.GetValue("showLevel", true);
                 _showLogName = reader.GetValue("showLogName", false);
                 Level = reader.GetValue("Level", LogLevel.All);
-                source = new LogSource(new[] { listener }, true);
+                source = new LogSource(new[] {listener}, true);
             }
+
+            /// <summary>
+            ///     The default <see cref="LogLevel" /> to use when creating new <see cref="ILog" /> instances.
+            /// </summary>
+            public static LogLevel Level { get; set; }
 
             private static void Reader_ConfigChange(object sender, ConfigReader e)
             {
-
             }
 
 
@@ -2246,13 +2246,13 @@ namespace Tsharp
             static ArgUtils()
             {
                 s_parsers = new Hashtable();
-                RegisterTypeParser(delegate (string s) { return Convert.ToBoolean(s); });
-                RegisterTypeParser(delegate (string s) { return Convert.ToInt16(s); });
-                RegisterTypeParser(delegate (string s) { return Convert.ToInt32(s); });
-                RegisterTypeParser(delegate (string s) { return Convert.ToInt64(s); });
-                RegisterTypeParser(delegate (string s) { return Convert.ToSingle(s); });
-                RegisterTypeParser(delegate (string s) { return Convert.ToDouble(s); });
-                RegisterTypeParser(delegate (string s) { return Convert.ToDecimal(s); });
+                RegisterTypeParser(delegate(string s) { return Convert.ToBoolean(s); });
+                RegisterTypeParser(delegate(string s) { return Convert.ToInt16(s); });
+                RegisterTypeParser(delegate(string s) { return Convert.ToInt32(s); });
+                RegisterTypeParser(delegate(string s) { return Convert.ToInt64(s); });
+                RegisterTypeParser(delegate(string s) { return Convert.ToSingle(s); });
+                RegisterTypeParser(delegate(string s) { return Convert.ToDouble(s); });
+                RegisterTypeParser(delegate(string s) { return Convert.ToDecimal(s); });
             }
 
             /// <summary>
@@ -2303,7 +2303,7 @@ namespace Tsharp
             /// <seealso cref="Coalesce{T}" />
             public static string Coalesce(params string[] values)
             {
-                return Coalesce(delegate (string v) { return !string.IsNullOrEmpty(v); }, values);
+                return Coalesce(delegate(string v) { return !string.IsNullOrEmpty(v); }, values);
             }
 
             /// <summary>
@@ -2318,7 +2318,7 @@ namespace Tsharp
                     return null;
 
                 if (predicate == null)
-                    predicate = delegate (T v) { return v != null; };
+                    predicate = delegate(T v) { return v != null; };
 
                 for (var i = 0; i < values.Length; i++)
                 {
@@ -2346,7 +2346,7 @@ namespace Tsharp
                     return defaultValue;
                 try
                 {
-                    result = (T)Enum.Parse(typeof(T), stringValue, true);
+                    result = (T) Enum.Parse(typeof(T), stringValue, true);
                 }
                 catch
                 {
@@ -2709,13 +2709,12 @@ namespace Tsharp
 
             private static string RootFileNameAndEnsureTargetFolderExists(string fileName)
             {
-
                 var rootedFileName = fileName;
                 if (!Path.IsPathRooted(rootedFileName))
                     rootedFileName =
-                        Path.Combine(AppDomain.CurrentDomain.GetData("DataDirectory") as string ??
-                        AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
-                            rootedFileName);
+                        Path.Combine(
+                            AppDomain.CurrentDomain.GetData("DataDirectory") as string ??
+                            AppDomain.CurrentDomain.SetupInformation.ApplicationBase, rootedFileName);
 
                 var directory = Path.GetDirectoryName(rootedFileName);
                 if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
@@ -2921,26 +2920,27 @@ namespace Tsharp
                 WriteLine(o == null ? "" : o.ToString());
             }
 
-            ///// <summary>
+            /////         return followed by a line feed (\r\n).
+            /////         class, followed by a line terminator. The default line terminator is a carriage
+            /////         specify when you inherit from the <see cref='System.Diagnostics.TraceListener' />
+            /////         name and the name of the <paramref name="o" />parameter to the listener you
+            /////         Writes a category
             /////     <para>
-            /////         Writes a category name and a message to the listener you specify when you
-            /////         inherit from the <see cref='System.Diagnostics.TraceListener' /> class,
-            /////         followed by a line terminator. The default line terminator is a carriage return followed by a line feed (\r\n).
-            /////     </para>
-            ///// </summary>
-            //public virtual void WriteLine(string message, string category)
-            //{
-            //    if (category == null) WriteLine(message);
-            //    else WriteLine(category + ": " + (message == null ? string.Empty : message));
-            //}
 
             ///// <summary>
+            //}
+            //    else WriteLine(category + ": " + (message == null ? string.Empty : message));
+            //    if (category == null) WriteLine(message);
+            //{
+            //public virtual void WriteLine(string message, string category)
+            ///// </summary>
+            /////     </para>
+            /////         followed by a line terminator. The default line terminator is a carriage return followed by a line feed (\r\n).
+            /////         inherit from the <see cref='System.Diagnostics.TraceListener' /> class,
+            /////         Writes a category name and a message to the listener you specify when you
             /////     <para>
-            /////         Writes a category
-            /////         name and the name of the <paramref name="o" />parameter to the listener you
-            /////         specify when you inherit from the <see cref='System.Diagnostics.TraceListener' />
-            /////         class, followed by a line terminator. The default line terminator is a carriage
-            /////         return followed by a line feed (\r\n).
+
+            ///// <summary>
             /////     </para>
             ///// </summary>
             //public virtual void WriteLine(object o, string category)
@@ -3208,7 +3208,7 @@ namespace Tsharp
             private static Encoding GetEncodingWithFallback(Encoding encoding)
             {
                 // Clone it and set the "?" replacement fallback
-                var fallbackEncoding = (Encoding)encoding.Clone();
+                var fallbackEncoding = (Encoding) encoding.Clone();
                 fallbackEncoding.EncoderFallback = EncoderFallback.ReplacementFallback;
                 fallbackEncoding.DecoderFallback = DecoderFallback.ReplacementFallback;
 
@@ -3763,7 +3763,7 @@ namespace Tsharp
 
                 private static Encoding GetEncodingWithFallback()
                 {
-                    var encoding = (Encoding)new UTF8Encoding(false).Clone();
+                    var encoding = (Encoding) new UTF8Encoding(false).Clone();
                     encoding.EncoderFallback = EncoderFallback.ReplacementFallback;
                     encoding.DecoderFallback = DecoderFallback.ReplacementFallback;
                     return encoding;
@@ -3776,7 +3776,7 @@ namespace Tsharp
                 public void PerformRoll(DateTimeOffset rollDateTime)
                 {
                     var actualFileName =
-                        ((FileStream)((StreamWriter)owner.Writer).BaseStream).Name;
+                        ((FileStream) ((StreamWriter) owner.Writer).BaseStream).Name;
 
                     if (owner.rollFileExistsBehavior == RollFileExistsBehavior.Overwrite &&
                         string.IsNullOrEmpty(owner.timeStampPattern))
@@ -3870,7 +3870,7 @@ namespace Tsharp
                     {
                         currentWriter = owner.Writer as StreamWriter;
                         if (currentWriter == null) return false;
-                        var actualFileName = ((FileStream)currentWriter.BaseStream).Name;
+                        var actualFileName = ((FileStream) currentWriter.BaseStream).Name;
 
                         currentWriter.Close();
 
@@ -3900,7 +3900,7 @@ namespace Tsharp
                             NextRollDateTime =
                                 CalculateNextRollDate(
                                     File.GetCreationTime(
-                                        ((FileStream)((StreamWriter)owner.Writer).BaseStream).Name));
+                                        ((FileStream) ((StreamWriter) owner.Writer).BaseStream).Name));
                         }
                         catch (Exception)
                         {
@@ -3968,7 +3968,7 @@ namespace Tsharp
                 public override void Write(char value)
                 {
                     base.Write(value);
-                    Tally += Encoding.GetByteCount(new[] { value });
+                    Tally += Encoding.GetByteCount(new[] {value});
                 }
 
                 /// <summary>
@@ -4086,7 +4086,6 @@ namespace Tsharp
                 GC.SuppressFinalize(this);
             }
 
-           
 
             public void WriteLine(object message)
             {
@@ -4475,7 +4474,7 @@ namespace Tsharp
             /// </summary>
             public int? FieldCount
             {
-                get { return Fields != null ? Fields.Count : (int?)null; }
+                get { return Fields != null ? Fields.Count : (int?) null; }
             }
 
             #endregion Properties
@@ -4611,7 +4610,7 @@ namespace Tsharp
             /// <returns></returns>
             public DataTable ReadIntoDataTable()
             {
-                return ReadIntoDataTable(new System.Type[] { });
+                return ReadIntoDataTable(new System.Type[] {});
             }
 
             /// <summary>
@@ -4959,7 +4958,7 @@ namespace Tsharp
             {
                 using (
                     var reader = new CsvReader(filePath, encoding)
-                    { HasHeaderRow = hasHeaderRow, TrimColumns = trimColumns })
+                        {HasHeaderRow = hasHeaderRow, TrimColumns = trimColumns})
                 {
                     PopulateCsvFile(reader);
                 }
@@ -4998,7 +4997,7 @@ namespace Tsharp
             {
                 using (
                     var reader = new CsvReader(stream, encoding)
-                    { HasHeaderRow = hasHeaderRow, TrimColumns = trimColumns })
+                        {HasHeaderRow = hasHeaderRow, TrimColumns = trimColumns})
                 {
                     PopulateCsvFile(reader);
                 }
@@ -5037,7 +5036,7 @@ namespace Tsharp
             {
                 using (
                     var reader = new CsvReader(encoding, csvContent)
-                    { HasHeaderRow = hasHeaderRow, TrimColumns = trimColumns })
+                        {HasHeaderRow = hasHeaderRow, TrimColumns = trimColumns})
                 {
                     PopulateCsvFile(reader);
                 }
@@ -5111,6 +5110,13 @@ namespace Tsharp
         /// </summary>
         public class ConfigReader
         {
+            private readonly string _filename;
+
+            /// <summary>
+            ///     Hold lines for here mode.
+            /// </summary>
+            private readonly List<string> _here = new List<string>();
+
             private readonly bool ignoreError;
             private readonly FileSystemWatcher watcher = new FileSystemWatcher();
 
@@ -5119,13 +5125,6 @@ namespace Tsharp
             /// </summary>
             protected Dictionary<string, string> _configValues =
                 new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-            private readonly string _filename;
-
-            /// <summary>
-            ///     Hold lines for here mode.
-            /// </summary>
-            private readonly List<string> _here = new List<string>();
 
             /// <summary>
             ///     Initialize new instance and read the configuration from file.
@@ -5266,7 +5265,7 @@ namespace Tsharp
                     if (mode == ParserMode.Normal)
                     {
                         // Split to <key> = <value> pair
-                        var pair = line.Split(new[] { '=' }, 2);
+                        var pair = line.Split(new[] {'='}, 2);
 
                         // Test for one part
                         if (pair.Length == 1)
@@ -5471,7 +5470,7 @@ namespace Tsharp
 
                     try
                     {
-                        return (T)Convert.ChangeType(_value, typeof(T), provider);
+                        return (T) Convert.ChangeType(_value, typeof(T), provider);
                     }
                     catch (FormatException e)
                     {
@@ -5522,7 +5521,7 @@ namespace Tsharp
 
                     try
                     {
-                        return (T)Convert.ChangeType(_value, typeof(T), provider);
+                        return (T) Convert.ChangeType(_value, typeof(T), provider);
                     }
                     catch (FormatException e)
                     {
@@ -5575,7 +5574,7 @@ namespace Tsharp
 
                     try
                     {
-                        value = (T)Convert.ChangeType(_value, typeof(T), provider);
+                        value = (T) Convert.ChangeType(_value, typeof(T), provider);
                         return true;
                     }
                     catch (FormatException e)

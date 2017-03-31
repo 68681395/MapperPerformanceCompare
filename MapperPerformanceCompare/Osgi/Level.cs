@@ -1,33 +1,31 @@
-﻿using System;
-namespace TSharp.Core.Osgi
+﻿namespace PerformanceTool.Osgi
 {
     /// <summary>
-    /// 服务缓存级别
+    ///     服务缓存级别
     /// </summary>
     /// <author>
-    /// tangjingbo
+    ///     tangjingbo
     /// </author>
-    public enum Level : int
+    public enum Level
     {
         /// <summary>
-        /// 
         /// </summary>
         ROOT = 1 << 0,
+
         /// <summary>
-        /// 
         /// </summary>
         SESSION = 1 << 1,
+
         /// <summary>
-        /// 
         /// </summary>
         REQUSET = 1 << 2,
+
         /// <summary>
-        /// 
         /// </summary>
         THREAD = 1 << 3,
 
         /// <summary>
-        /// TRANSIENT
+        ///     TRANSIENT
         /// </summary>
         TRANSIENT = 1 << 31
     }

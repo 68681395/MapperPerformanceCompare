@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TSharp.Core.Osgi
+namespace PerformanceTool.Osgi
 {
     internal static class Ex
     {

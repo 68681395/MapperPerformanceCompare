@@ -8,125 +8,120 @@
     <script src="echarts.min.js"></script>
 </head>
 <body>
-    <!-- prepare Dom which be set width and height for echarts -->
-    <div id="main" style="width: 1000px;height:600px;"></div>
-    <script type="text/javascript">
-        // dom ready to initialize echart instance
-        var myChart = echarts.init(document.getElementById('main'));
+<!-- prepare Dom which be set width and height for echarts -->
+<div id="main" style="height: 600px; width: 1000px;"></div>
+<script type="text/javascript">
+    // dom ready to initialize echart instance
+    var myChart = echarts.init(document.getElementById('main'));
 
-         
-        // set config and data
-        var seriesdata = new function () {
-            var d = [];
-            for (var i = 0, n = dataAll.length; i < n; i++) {
-                d.push({
-                    name: dataAll[i].name,
-                    type: 'scatter',
-                    data: new function(d) {
-                        var iterations = d.Iterations;
-                        var timeElapseds = d.TimeElapseds;
-                        var _abc = [];
-                        for (var i = 0, n = iterations.length; i < n; i++)
-                            _abc.push([iterations[i], timeElapseds[i]]);
-                        return _abc;
-                    }(dataAll[i]),
-                    markPoint: {
-                        data: [
-                            { type: 'max', name: 'Max' },
-                            //{ type: 'min', name: 'Min' }
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            { type: 'average', name: 'Average' }
-                        ]
-                    }
-                });
-            }
-            return d;
-        }();
-        var legenddata = new function () {
-            var d = [];
-            for (var i = 0, n = dataAll.length; i < n; i++) {
-                d.push(dataAll[i].name);
-            }
-            return d;
-        }();
 
-        option = {
-            title: {
-                text: '',
-                subtext: 'Mapper performance compare : Jingbo 2016'
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            tooltip: {
-                trigger: 'axis',
-                showDelay: 0,
-                formatter: function (params) {
-                    if (params.value.length > 1) {
-                        return params.seriesName + ' :<br/>'
-                           + params.value[0] + ' count '
-                           + params.value[1] + ' ms ';
-                    }
-                    else {
-                        return params.seriesName + ' :<br/>'
-                           + params.name + ' : '
-                           + params.value + 'ms ';
-                    }
+    // set config and data
+    var seriesdata = new function() {
+        var d = [];
+        for (var i = 0, n = dataAll.length; i < n; i++) {
+            d.push({
+                name: dataAll[i].name,
+                type: 'scatter',
+                data: new function(d) {
+                    var iterations = d.Iterations;
+                    var timeElapseds = d.TimeElapseds;
+                    var _abc = [];
+                    for (var i = 0, n = iterations.length; i < n; i++)
+                        _abc.push([iterations[i], timeElapseds[i]]);
+                    return _abc;
+                }(dataAll[i]),
+                markPoint: {
+                    data: [
+                        { type: 'max', name: 'Max' },
+                        //{ type: 'min', name: 'Min' }
+                    ]
                 },
-                axisPointer: {
-                    show: true,
-                    type: 'cross',
+                markLine: {
+                    data: [
+                        { type: 'average', name: 'Average' }
+                    ]
+                }
+            });
+        }
+        return d;
+    }();
+    var legenddata = new function() {
+        var d = [];
+        for (var i = 0, n = dataAll.length; i < n; i++) {
+            d.push(dataAll[i].name);
+        }
+        return d;
+    }();
+
+    option = {
+        title: {
+            text: '',
+            subtext: 'Mapper performance compare : Jingbo 2016'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        tooltip: {
+            trigger: 'axis',
+            showDelay: 0,
+            formatter: function(params) {
+                if (params.value.length > 1) {
+                    return params.seriesName + ' :<br/>' + params.value[0] + ' count ' + params.value[1] + ' ms ';
+                } else {
+                    return params.seriesName + ' :<br/>' + params.name + ' : ' + params.value + 'ms ';
+                }
+            },
+            axisPointer: {
+                show: true,
+                type: 'cross',
+                lineStyle: {
+                    type: 'dashed',
+                    width: 1
+                }
+            }
+        },
+        legend: {
+            data: legenddata,
+            left: 'left'
+        },
+        xAxis: [
+            {
+                type: 'value',
+                scale: true,
+                axisLabel: {
+                    formatter: '{value} counts'
+                },
+                splitLine: {
                     lineStyle: {
-                        type: 'dashed',
-                        width: 1
+                        type: 'dashed'
                     }
                 }
-            },
-            legend: {
-                data: legenddata,
-                left: 'left'
-            },
-            xAxis: [
-                {
-                    type: 'value',
-                    scale: true,
-                    axisLabel: {
-                        formatter: '{value} counts'
-                    },
-                    splitLine: {
-                        lineStyle: {
-                            type: 'dashed'
-                        }
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                scale: true,
+                axisLabel: {
+                    formatter: '{value}'
+                },
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed'
                     }
                 }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    scale: true,
-                    axisLabel: {
-                        formatter: '{value}'
-                    },
-                    splitLine: {
-                        lineStyle: {
-                            type: 'dashed'
-                        }
-                    }
-                }
-            ],
-            series: seriesdata
-        };
+            }
+        ],
+        series: seriesdata
+    };
 
 
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-         
-    </script>
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+</script>
 </body>
 </html>

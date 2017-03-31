@@ -1,67 +1,58 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Concurrent;
 
-namespace TSharp.Core.Osgi.Internal
+namespace PerformanceTool.Osgi.Internal
 {
     /// <summary>
-    /// 多版本Assembly
+    ///     多版本Assembly
     /// </summary>
     public class MultiVersionAssembly
     {
         private readonly ConcurrentDictionary<Version, Assembly> _assemblys;
-        private Assembly _currentVersionAssembly;
-        private Assembly _latestVersionAssembly;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MultiVersionAssembly"/> class.
+        ///     Initializes a new instance of the <see cref="MultiVersionAssembly" /> class.
         /// </summary>
         public MultiVersionAssembly()
         {
             _assemblys = new ConcurrentDictionary<Version, Assembly>();
-            _latestVersionAssembly = null;
+            LatestVersionAssembly = null;
         }
 
         /// <summary>
-        /// Gets the latest version assembly.
+        ///     Gets the latest version assembly.
         /// </summary>
         /// <value>The latest version assembly.</value>
-        public Assembly LatestVersionAssembly
-        {
-            get { return _latestVersionAssembly; }
-        }
+        public Assembly LatestVersionAssembly { get; private set; }
 
         /// <summary>
-        /// Gets the current version assembly.
+        ///     Gets the current version assembly.
         /// </summary>
         /// <value>The current version assembly.</value>
-        public Assembly CurrentVersionAssembly
-        {
-            get { return _currentVersionAssembly; }
-        }
+        public Assembly CurrentVersionAssembly { get; private set; }
 
         /// <summary>
-        /// Gets the name.
+        ///     Gets the name.
         /// </summary>
         /// <value>The name.</value>
         public string Name
         {
-            get { return _latestVersionAssembly.GetName().Name; }
+            get { return LatestVersionAssembly.GetName().Name; }
         }
 
         /// <summary>
-        /// Gets the version.
+        ///     Gets the version.
         /// </summary>
         /// <value>The version.</value>
         public Version Version
         {
-            get { return _currentVersionAssembly.GetName().Version; }
+            get { return CurrentVersionAssembly.GetName().Version; }
         }
 
         /// <summary>
-        /// 根据版本获取
+        ///     根据版本获取
         /// </summary>
         /// <value></value>
         public Assembly this[Version version]
@@ -79,20 +70,20 @@ namespace TSharp.Core.Osgi.Internal
         }
 
         /// <summary>
-        /// Determines whether [is latest version] [the specified assembly].
+        ///     Determines whether [is latest version] [the specified assembly].
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <returns>
-        /// 	<c>true</c> if [is latest version] [the specified assembly]; otherwise, <c>false</c>.
+        ///     <c>true</c> if [is latest version] [the specified assembly]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsLatestVersion(Assembly assembly)
         {
-            return _latestVersionAssembly == null
-                   || assembly.GetName().Version.CompareTo(_latestVersionAssembly.GetName().Version) > 0;
+            return LatestVersionAssembly == null ||
+                   assembly.GetName().Version.CompareTo(LatestVersionAssembly.GetName().Version) > 0;
         }
 
         /// <summary>
-        /// Adds the specified assembly.
+        ///     Adds the specified assembly.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <returns></returns>
@@ -102,24 +93,22 @@ namespace TSharp.Core.Osgi.Internal
         }
 
         /// <summary>
-        /// Adds the specified assembly.
+        ///     Adds the specified assembly.
         /// </summary>
         /// <param name="assembly">The assembly.</param>
         /// <param name="update">if set to <c>true</c> [update].</param>
         /// <returns></returns>
         public MultiVersionAssembly Add(Assembly assembly, bool update)
         {
-            Version ver = assembly.GetName().Version;
+            var ver = assembly.GetName().Version;
             if (!_assemblys.ContainsKey(ver))
             {
-                if (_latestVersionAssembly == null
-                    || ver.CompareTo(_latestVersionAssembly.GetName().Version) > 0)
+                if (LatestVersionAssembly == null ||
+                    ver.CompareTo(LatestVersionAssembly.GetName().Version) > 0)
                 {
-                    _latestVersionAssembly = assembly;
+                    LatestVersionAssembly = assembly;
                     if (update)
-                    {
-                        _currentVersionAssembly = assembly;
-                    }
+                        CurrentVersionAssembly = assembly;
                 }
                 _assemblys[ver] = assembly;
             }
@@ -127,7 +116,7 @@ namespace TSharp.Core.Osgi.Internal
         }
 
         /// <summary>
-        /// Gets the assemblys.
+        ///     Gets the assemblys.
         /// </summary>
         /// <returns></returns>
         public Assembly[] GetAssemblys()
@@ -141,10 +130,10 @@ namespace TSharp.Core.Osgi.Internal
         }
 
         /// <summary>
-        /// Returns a hash code for this instance.
+        ///     Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        ///     A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {
@@ -152,18 +141,18 @@ namespace TSharp.Core.Osgi.Internal
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+        ///     Determines whether the specified <see cref="System.Object" /> is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        ///     <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="T:System.NullReferenceException">
-        /// 	<paramref name="obj"/> 参数为 null。
+        ///     <paramref name="obj" /> 参数为 null。
         /// </exception>
         public override bool Equals(object obj)
         {
-            return Name.Equals(((MultiVersionAssembly)obj).Name);
+            return Name.Equals(((MultiVersionAssembly) obj).Name);
         }
     }
 }
