@@ -187,7 +187,7 @@ namespace PerformanceTool.Osgi
             {
                 ImplType = implType;
                 Priority = (byte)priority;
-                metadatas = ImplType.GetCustomAttributes<Attribute>(false);
+                metadatas = ImplType.GetCustomAttributes<Attribute>(false).ToArray();
             }
 
             public Func<object> New
@@ -213,7 +213,7 @@ namespace PerformanceTool.Osgi
                 return result;
             }
 
-            private readonly IEnumerable<Attribute> metadatas;
+            private readonly Attribute[] metadatas;
 
             internal TMetadata GetMetadata<TMetadata>()
             {

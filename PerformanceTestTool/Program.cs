@@ -5,9 +5,41 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using PerformanceTool.Osgi;
+using PerformanceTool.SharpHttpServer;
+using System.Net;
+using System;
 
 namespace PerformanceTool
 {
+    public class Server : HttpServer
+    {
+        public Server(int port)
+            : base(port)
+        {
+            Get["/"] = _ => "Hello world!";
+
+            Get["/api/v1/users"] = GetUsers;
+            Get["dataJs.js"] = req =>
+            {
+             
+              //  HttpListenerContext.
+                return "";
+            };
+            ServeStatic(new DirectoryInfo
+                
+                ("/"), "/");
+        }
+
+        private string GetUsers(HttpListenerRequest arg)
+        {
+            return JsonConvert.SerializeObject(new[]
+            {
+                new { Id = 1, Username = "peter" },
+                new { Id = 1, Username = "jack" },
+                new { Id = 1, Username = "john" },
+            });
+        }
+    }
     internal class Program
     {
         private List<KeyValuePair<ITestMetadata, ITestRunner>> TestItems;
@@ -66,11 +98,15 @@ namespace PerformanceTool
                     writer.Write(";");
                     writer.Flush();
                 }
-                var chartfile = Path.Combine(dir, "performance.html");
-                Process.Start(new ProcessStartInfo(chartfile));
+                // var chartfile = Path.Combine(dir, "performance.html");
+                //Process.Start(new ProcessStartInfo(chartfile));
+                var server = new Server(8080);
+                server.Run();
+                Process.Start("explorer.exe", "http://localhost:8080/api/v1/users");
+                Console.ReadLine();
             }
 
-            //Console.Read();
+          
         }
     }
 }
