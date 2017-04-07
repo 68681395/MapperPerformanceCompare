@@ -14,7 +14,7 @@ namespace PerformanceTool.SimpleThreadPool
     /// </remarks>
     public class SimpleThreadPool : IThreadPool
     {
-        private const int DefaultThreadPoolSize = 10;
+        //private const int DefaultThreadPoolSize = 10;
         private static readonly SimpleLogger.ILog log = SimpleLogger.LogManager.GetLogger(typeof(SimpleThreadPool));
 
         private readonly LinkedList<WorkerThread> availWorkers = new LinkedList<WorkerThread>();
@@ -22,7 +22,7 @@ namespace PerformanceTool.SimpleThreadPool
         private readonly object nextRunnableLock = new object();
         private readonly string schedulerInstanceName = null;
 
-        private int count = DefaultThreadPoolSize;
+        private int count = Environment.ProcessorCount * 2;
         private volatile bool handoffPending;
         private volatile bool isShutdown;
         private ThreadPriority prio = ThreadPriority.Normal;

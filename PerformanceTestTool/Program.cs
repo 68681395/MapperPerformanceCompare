@@ -8,6 +8,9 @@ using PerformanceTool.Osgi;
 using PerformanceTool.SharpHttpServer;
 using System.Net;
 using System;
+using System.Threading.Tasks.Schedulers;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace PerformanceTool
 {
@@ -21,12 +24,12 @@ namespace PerformanceTool
             Get["/api/v1/users"] = GetUsers;
             Get["dataJs.js"] = req =>
             {
-             
-              //  HttpListenerContext.
+
+                //  HttpListenerContext.
                 return "";
             };
             ServeStatic(new DirectoryInfo
-                
+
                 ("/"), "/");
         }
 
@@ -66,6 +69,26 @@ namespace PerformanceTool
 
         private static void Main(string[] args)
         {
+            var qts = new QueuedTaskScheduler(TaskScheduler.Default, maxConcurrencyLevel: 4);
+            var options = new ParallelOptions { TaskScheduler = qts };
+
+            Task.Factory.StartNew(() =>
+            {
+                Parallel.For(0, 100, options, i =>
+                {
+                    //…
+                });
+            }, CancellationToken.None, TaskCreationOptions.None, qts);
+
+            Task.Factory.StartNew(() =>
+            {
+                Parallel.For(0, 100, options, i =>
+                {
+                    //…
+                });
+            }, CancellationToken.None, TaskCreationOptions.None, qts);
+
+
             using (var e = OsgiEngine.InitWinformEngine("testfolder"))
             {
                 var host = new Program();
@@ -106,7 +129,7 @@ namespace PerformanceTool
                 Console.ReadLine();
             }
 
-          
+
         }
     }
 }
