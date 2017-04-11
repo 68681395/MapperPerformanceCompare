@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using PerformanceTool;
 
-namespace PerformanceTool.TaskThreadPool
+namespace Pf.Tester.TaskThreadPool
 {
     /// <summary>
     /// An IThreadPool implementation which schedules tasks using a TaskScheduler (provided by implementers)

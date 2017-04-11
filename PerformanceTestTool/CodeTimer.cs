@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using PerformanceTool;
 
-namespace PerformanceTool
+namespace Pf.Tester
 {
     public sealed class CodeTimer
     {

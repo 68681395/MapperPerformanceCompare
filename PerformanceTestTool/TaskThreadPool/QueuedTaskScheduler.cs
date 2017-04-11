@@ -14,7 +14,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PerformanceTool.TaskThreadPool
+namespace Pf.Tester.TaskThreadPool
 {
     // ReSharper disable All
 

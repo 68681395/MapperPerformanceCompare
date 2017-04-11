@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Threading;
 
-namespace PerformanceTool.SimpleThreadPool
+namespace Pf.Tester.SimpleThreadPool
 {
     /// <summary>
     ///线程基类

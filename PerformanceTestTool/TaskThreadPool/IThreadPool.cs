@@ -22,7 +22,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace PerformanceTool.TaskThreadPool
+namespace Pf.Tester.TaskThreadPool
 {
     /// <summary>
     /// The interface to be implemented by classes that want to provide a thread

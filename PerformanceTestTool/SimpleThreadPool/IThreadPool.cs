@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace PerformanceTool.SimpleThreadPool
+namespace Pf.Tester.SimpleThreadPool
 {
     /// <summary>
     /// Interface IThreadPool

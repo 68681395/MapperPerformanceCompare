@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using PerformanceTool;
 
-namespace PerformanceTool
+namespace Pf.Tester
 {
     public class Record
     {

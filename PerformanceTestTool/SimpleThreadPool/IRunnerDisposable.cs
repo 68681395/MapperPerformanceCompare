@@ -1,6 +1,6 @@
 using System;
 
-namespace PerformanceTool.SimpleThreadPool
+namespace Pf.Tester.SimpleThreadPool
 {
     /// <summary>
     /// This interface should be implemented by any class whose instances are intended

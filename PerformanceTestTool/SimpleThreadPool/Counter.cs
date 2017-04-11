@@ -1,6 +1,6 @@
 using System.Threading;
 
-namespace PerformanceTool.SimpleThreadPool
+namespace Pf.Tester.SimpleThreadPool
 {
     /// <summary>
     /// 计数器。任务处理状态标志，当处理任务数过大时暂停处理，优先处理根目录下文件。

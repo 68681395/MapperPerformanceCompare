@@ -1,4 +1,4 @@
-namespace PerformanceTool
+namespace Pf.Tester
 {
     public class IterationRecord
     {

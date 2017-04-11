@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace PerformanceTool.TaskThreadPool
+namespace Pf.Tester.TaskThreadPool
 {
     /// <summary>
     /// An implementation of the TaskSchedulingThreadPool which uses a custom task scheduler
