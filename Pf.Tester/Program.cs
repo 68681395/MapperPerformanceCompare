@@ -23,11 +23,13 @@ namespace Pf.Tester
                     s.WhenStopped(tc => tc.Stop());
                     s.AfterStartingService(hsc =>
                     {
-                        if (hsc is ConsoleRunHost)
+                        //var host = hsc as ConsoleRunHost;
+                        if (System.Environment.UserInteractive)
                         {
                             Process.Start("explorer.exe", url);
                         }
                     });
+                   
                 });
                 x.RunAsLocalSystem();
                 x.SetDescription("This is a tool for performance test.");
