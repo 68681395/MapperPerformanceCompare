@@ -1,41 +1,44 @@
 ﻿using System.Diagnostics;
 using Topshelf;
 using Topshelf.Hosts;
+using Topshelf.Logging;
 
 namespace Pf.Tester
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            StartTopshelf();
+            return (int)StartTopshelf();
         }
 
-        static void StartTopshelf()
+        static TopshelfExitCode StartTopshelf()
         {
             var url = "http://localhost:8080";
-            HostFactory.Run(x =>
-            {
-                x.Service<WebServer>(s =>
-                {
-                    s.ConstructUsing(name => new WebServer(name, url));
-                    s.WhenStarted(tc => tc.Start());
-                    s.WhenStopped(tc => tc.Stop());
-                    s.AfterStartingService(hsc =>
-                    {
-                        //var host = hsc as ConsoleRunHost;
-                        if (System.Environment.UserInteractive)
-                        {
-                            Process.Start("explorer.exe", url);
-                        }
-                    });
-                   
-                });
-                x.RunAsLocalSystem();
-                x.SetDescription("This is a tool for performance test.");
-                x.SetDisplayName("Tsharp Performance Tester");
-                x.SetServiceName("TsharpPerformanceTester");
-            });
+            return HostFactory.Run(x =>
+             {
+                 x.Service<WebServer>(s =>
+                 {
+                     s.ConstructUsing(name => new WebServer(name, url));
+                     s.WhenStarted(
+                         (tc, hsc) =>
+                         {
+                             tc.Start();
+                             HostLogger.Current.Get("WebServer").Info($"WebServer start on {url}");
+                             var host = hsc as ConsoleRunHost;
+                             if (host != null)
+                             {
+                                 Process.Start("explorer.exe", url);
+                             }
+                             return true;
+                         });
+                     s.WhenStopped(tc => tc.Stop());
+                 });
+                 x.RunAsLocalSystem();
+                 x.SetDescription("This is a tool for performance test.");
+                 x.SetDisplayName("Tsharp Performance Tester");
+                 x.SetServiceName("TsharpPerformanceTester");
+             });
         }
     }
 }
