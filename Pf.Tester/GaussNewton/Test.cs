@@ -5,7 +5,7 @@ using System;
 
 class Test
 {
-    static void Main()
+    static void _Main()
     {
         double[] Y =
         {
