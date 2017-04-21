@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Owin.Hosting;
 using System.Diagnostics;
+using Topshelf.Logging;
 
 namespace Pf.Tester
 {
@@ -25,5 +26,7 @@ namespace Pf.Tester
         {
             _webapp?.Dispose();
         }
+
+        public LogWriter Logger { get; } = HostLogger.Current.Get("WebServer");
     }
 }

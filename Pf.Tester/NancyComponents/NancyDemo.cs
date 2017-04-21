@@ -14,7 +14,7 @@ namespace Pf.Tester
             logs.AppendLine(s);
         }
 
-        public string GetLog() => logs.Replace("\r\n", "<br />").ToString();
+        public string GetLog() => logs.Replace("\r", "<br />").ToString();
 
         public NancyDemo() : base("/nancy")
         {
@@ -48,7 +48,7 @@ namespace Pf.Tester
                 {
                     var res = await client.GetAsync("http://nancyfx.org");
                     var content = await res.Content.ReadAsStringAsync();
-                    this.AddToLog("Response: " + content.Split('\n')[0] + "\n");
+                    this.AddToLog("Response: " + content + "\n");
                 }
                 return (Response)this.GetLog();
             };

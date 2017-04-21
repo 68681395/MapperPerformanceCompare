@@ -24,7 +24,7 @@ namespace Pf.Tester
                          (tc, hsc) =>
                          {
                              tc.Start();
-                             HostLogger.Current.Get("WebServer").Info($"WebServer start on {url}");
+                             tc.Logger.Info($"WebServer started on {url}");
                              var host = hsc as ConsoleRunHost;
                              if (host != null)
                              {
