@@ -144,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GaussNewton\GaussNewton.cs" />
+    <Compile Include="GaussNewton\Matrix.cs" />
     <Compile Include="GaussNewton\MyMatrix.cs" />
     <Compile Include="GaussNewton\Test.cs" />
     <Compile Include="NancyComponents\Class1.cs" />

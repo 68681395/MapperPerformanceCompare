@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Topshelf;
 using Topshelf.Hosts;
 using Topshelf.Logging;
@@ -9,6 +10,12 @@ namespace Pf.Tester
     {
         static int Main(string[] args)
         {
+            LightweightMatrixCSharp.Matrix matrix = new LightweightMatrixCSharp.Matrix(20000, 2);
+          
+
+
+            Console.ReadLine();
+            return 0;
             return (int)StartTopshelf();
         }
 
