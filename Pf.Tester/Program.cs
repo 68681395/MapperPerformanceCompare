@@ -10,12 +10,6 @@ namespace Pf.Tester
     {
         static int Main(string[] args)
         {
-            LightweightMatrixCSharp.Matrix matrix = new LightweightMatrixCSharp.Matrix(20000, 2);
-          
-
-
-            Console.ReadLine();
-            return 0;
             return (int)StartTopshelf();
         }
 
